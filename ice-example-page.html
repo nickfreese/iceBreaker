@@ -1,0 +1,249 @@
+<style>
+*{padding:0;margin:0;}
+#blup{
+Width:200px;
+height:200px;
+}
+</style>
+
+<div id="blup">
+
+</div>
+
+<script>
+//Ice Breaker JS.  A responsive JS framework.
+
+//global class list
+var iceBreakerList = [];
+// sorts and organizes in reverse order by width.
+var listHandler = function(){
+iceBreakerList.sort(function(obj1, obj2) {
+	return obj1.breakpoint - obj2.breakpoint;
+});
+iceBreakerList.reverse();
+}
+//class definition
+class iceBreaker{
+	constructor(settings){
+		this.repeatState = 0;
+		if(settings.enableLandscape === true){
+		this.enableLandscape = settings.enableLandscape;
+		}
+		if(settings.enablePortrait === true){
+		this.enablePortrait = settings.enablePortrait;
+		}
+		if(typeof settings.css === 'string'){
+		this.css = settings.css;
+		iceBreakerCss(this);
+		}
+		if(typeof settings.myFunction !== "undefined"){
+		
+		if(typeof settings.min === "number"){
+		this.min = settings.min;
+		}
+		else{
+		this.min = 0;
+		}
+		
+		this.params = settings.params;
+		this.onresize = settings.onresize;
+		if(onresize === false){
+			this.repeatState = 0;
+		}
+		this.breakpoint = settings.breakpoint;
+		this.myFunction = settings.myFunction;
+		iceBreakerList.push(this);
+		listHandler();
+		}
+	}
+}
+var iceBreakerCss = function(cssInject){
+var insertCSS = document.createElement("STYLE");
+insertCSS.innerHTML = cssInject.css;
+document.body.appendChild(insertCSS);
+}
+
+//method checks if function should call, then calls it.
+iceBreaker.prototype.listenerFunc = function(breaker, repeatState, up, down){
+var this_ = this;
+var check = function(){
+if(this_.onresize === true){
+	if(window.innerWidth < this_.breakpoint && window.innerWidth < up && window.innerWidth > this_.min){
+		if(repeatState <= 0){
+			//call the function
+			this_.myFunction.apply(this_.myFunction, this_.params);
+				if(this_.onresize === false){
+					this_.repeatState = 1;
+				}
+				else{
+					this_.repeatState = 0;
+				}
+		}
+	}
+}
+if(this_.onresize === false){
+	if(window.innerWidth <= this_.breakpoint && window.innerWidth < up && window.innerWidth > this_.min){
+		if(repeatState <= 0 || window.innerWidth > down){
+			//call the function
+			this_.myFunction.apply(this_.myFunction, this_.params);
+			if(this_.onresize === false){
+				this_.repeatState = 1;
+			}
+			else{
+				this_.repeatState = 0;
+			}
+		}
+}
+else{
+	this_.repeatState = 0;
+}
+}
+}
+
+if(this.enableLandscape === true && this.enablePortrait === true){
+this.enablePortrait = false;
+}
+if(this.enableLandscape === true){
+if(window.innerWidth > window.innerHeight){
+check();
+}
+}
+else if(this.enablePortrait === true){
+if(window.innerWidth < window.innerHeight){
+check();
+}
+}
+else{
+check();
+}
+
+}
+
+//global listener function
+var iceBreakerListener = function(){
+listHandler();
+if(iceBreakerList.length > 0){
+var initialize = function(){
+	for(i=0;i<iceBreakerList.length;i++){
+		if(i == iceBreakerList.length-1){
+			iceBreakerList[i].listenerFunc(iceBreakerList[i].breakpoint, iceBreakerList[i].repeatState, iceBreakerList[i-1].breakpoint, 0);
+		}
+		else if(i == 0){
+			iceBreakerList[i].listenerFunc(iceBreakerList[i].breakpoint, iceBreakerList[i].repeatState, iceBreakerList[i].breakpoint+1, iceBreakerList[i+1].breakpoint);
+		}
+		else{
+			iceBreakerList[i].listenerFunc(iceBreakerList[i].breakpoint, iceBreakerList[i].repeatState, iceBreakerList[i-1].breakpoint, iceBreakerList[i+1].breakpoint);
+		}
+		}
+		}
+var findNewFunctions = setInterval(initialize, 16);
+var intervalIsOn = true;
+
+window.addEventListener("resize", function(e){
+if(intervalIsOn === true){
+clearInterval(findNewFunctions);
+intervalIsOn = false;
+}
+	for(i=0;i<iceBreakerList.length;i++){
+		if(i == iceBreakerList.length-1){
+			iceBreakerList[i].listenerFunc(iceBreakerList[i].breakpoint, iceBreakerList[i].repeatState, iceBreakerList[i-1].breakpoint, 0);
+		}
+		else if(i == 0){
+			iceBreakerList[i].listenerFunc(iceBreakerList[i].breakpoint, iceBreakerList[i].repeatState, iceBreakerList[i].breakpoint+1, iceBreakerList[i+1].breakpoint);
+		}
+		else{
+			iceBreakerList[i].listenerFunc(iceBreakerList[i].breakpoint, iceBreakerList[i].repeatState, iceBreakerList[i-1].breakpoint, iceBreakerList[i+1].breakpoint);
+		}
+	}
+});
+}
+else{
+
+}
+}
+//End Ice breaker declaration
+
+/*-******* Copyright Nick Freese 2016 *******-*/
+
+
+//--------------------test icebreaker-----------------------
+
+//Test functions
+var testFunc = function(banana, butt){
+	document.getElementById("blup").style.width = window.innerWidth + "px";
+	document.getElementById("blup").style.background = "#333333";
+}
+
+var testFunc2 = function(banana, butt){
+	document.getElementById("blup").style.width = 200 + "px";
+document.getElementById("blup").style.background = "#e3e3e3";
+}
+
+var testFunc3 = function(banana, butt){
+	document.getElementById("blup").style.width = 100 + "px";
+document.getElementById("blup").style.background = "red";
+}
+
+var testFunc4 = function(banana, butt){
+	document.getElementById("blup").style.width = 100 + "px";
+document.getElementById("blup").style.background = "blue";
+}
+
+//set up parameter arrays
+var params1 = [20, 5];
+var params2 = [7, 9];
+var params3 = [12, 10];
+var params3 = [90, 10];
+
+//create iceBreaker Objects
+var testIceBreaker = new iceBreaker({breakpoint: 900, myFunction: testFunc, params: params1, onresize: true, enablePortrait: true, min: 700});
+
+var testIceBreaker2 = new iceBreaker({breakpoint: 600, myFunction: testFunc2, params: params2, onresize:false, enableLandscape: true});
+var testIceBreaker3 = new iceBreaker({breakpoint:1000, myFunction: testFunc3, params: params3, onresize: false});
+var testIceBreaker5 = new iceBreaker({breakpoint:2000, myFunction: function(butt, butts){document.getElementById("blup").style.background = "purple";}, params: params3, onresize: false});
+
+
+//run ice breaker with above objects
+iceBreakerListener();
+
+
+//new objects can be added dynamically at any time
+var testIceBreaker4 = new iceBreaker({breakpoint:1400, myFunction: testFunc4 , params: params3, onresize:false, enableLandscape: true, css: "@media all and (max-width: 699px) and (min-width: 520px) {#blup{border:3px solid yellow;}}"});
+
+/*Ice Breaker Spec*/
+/*
+iceBreaker is a Javascript Class which allows developers to control the calling of JS functions based on the users window width.
+Functions are called in a cascading effect from largest width to smallest.  widths are maximum widths.  The lowest width which is greater than the window size will be called last, thus taking priority. 
+
+the requered parameteras for the class constructor are as follows:
+
+************************************************
+Settings
+
+1.  breakpoint - the window width at which the function should call. - OPTIONAL
+
+2.  myFunction - just the name.  no parameters or parentheses.  Unless entering an anaonymouse function,  in which case write the function out in whole but still place the parameters in a parameter array. example of anaonymouse function:   function(butt, butts){console.log(butt);}  - REQUIRED
+
+3.  params - this should be an array of the parameters for this function call.  - REQUIRED
+
+4.  onresize - booleen, true makes the function call on resize.  False makes it only call once when the breakpoint is passed.  - REQUIRED
+
+5.  EnablePortrait - Booleen, if true, function only fires in portarait.  If both enableLandscape and enablePortrait are true then enableLandscape will take priority - OPTIONAL
+
+6.  EnableLandscape - Booleen, if true, function only fires in landscape.  If both enableLandscape and enablePortrait are true then enableLandscape will take priority - OPTIONAL
+
+7.  min - number value.  min width that the function can be call at.  - OPTIONAL
+
+8.  css - fill out with css to be injected.  This does not read the the orientation settings.  media queries must be made inside the css setting.  - OPTIONAL
+
+************************************************
+Setup
+
+example class definition - var testIceBreaker = new iceBreaker({breakpoint:1000, myFunction: testFunc3, params: params3, onresize: false});
+
+launch the listener - iceBreakerListener();
+
+
+
+*/
+</script>
