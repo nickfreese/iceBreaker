@@ -37,25 +37,27 @@ launch the listener - iceBreakerListener();
 ************************************************
 
 
-
-
 example usage below.
 --------------------------------------------------------------------
 
 //Test functions
+
 var testFunc = function(banana, butt){
 	document.getElementById("blup").style.width = window.innerWidth + "px";
 	document.getElementById("blup").style.background = "#333333";
 }
 
 //set up parameter arrays
+
 var params1 = [20, 5];
 
 //create iceBreaker Objects
+
 var testIceBreaker = new iceBreaker({breakpoint: 900, myFunction: testFunc, params: params1, onresize: true, enablePortrait: true, min: 700});
 
 
 //run ice breaker with above objects
+
 iceBreakerListener();
 
 
