@@ -1,14 +1,13 @@
 <style>
 *{padding:0;margin:0;}
+	
 #blup{
-Width:200px;
-height:200px;
+	Width:200px;
+	height:200px;
 }
 </style>
 
-<div id="blup">
-
-</div>
+<div id="blup"></div>
 
 <script>
 //Ice Breaker JS.  A responsive JS framework.
@@ -163,9 +162,6 @@ else{
 }
 //End Ice breaker declaration
 
-/*-******* Copyright Nick Freese 2016 *******-*/
-
-
 //--------------------test icebreaker-----------------------
 
 //Test functions
@@ -176,17 +172,17 @@ var testFunc = function(banana, butt){
 
 var testFunc2 = function(banana, butt){
 	document.getElementById("blup").style.width = 200 + "px";
-document.getElementById("blup").style.background = "#e3e3e3";
+	document.getElementById("blup").style.background = "#e3e3e3";
 }
 
 var testFunc3 = function(banana, butt){
 	document.getElementById("blup").style.width = 100 + "px";
-document.getElementById("blup").style.background = "red";
+	document.getElementById("blup").style.background = "red";
 }
 
 var testFunc4 = function(banana, butt){
 	document.getElementById("blup").style.width = 100 + "px";
-document.getElementById("blup").style.background = "blue";
+	document.getElementById("blup").style.background = "blue";
 }
 
 //set up parameter arrays
@@ -202,13 +198,10 @@ var testIceBreaker2 = new iceBreaker({breakpoint: 600, myFunction: testFunc2, pa
 var testIceBreaker3 = new iceBreaker({breakpoint:1000, myFunction: testFunc3, params: params3, onresize: false});
 var testIceBreaker5 = new iceBreaker({breakpoint:2000, myFunction: function(butt, butts){document.getElementById("blup").style.background = "purple";}, params: params3, onresize: false});
 
-
 //run ice breaker with above objects
 iceBreakerListener();
 
-
 //new objects can be added dynamically at any time
 var testIceBreaker4 = new iceBreaker({breakpoint:1400, myFunction: testFunc4 , params: params3, onresize:false, enableLandscape: true, css: "@media all and (max-width: 699px) and (min-width: 520px) {#blup{border:3px solid yellow;}}"});
-
-
+	
 </script>
